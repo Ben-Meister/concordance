@@ -37,8 +37,30 @@ ABI_VERSION = 6
 # Load the DLL
 
 if platform.system() == 'Windows':
-    with os.add_dll_directory(os.path.dirname(__file__)):
-        _dll = cdll.LoadLibrary('libconcord-%i.dll' % ABI_VERSION)
+    # Python 3.8+ does not use PATH to find DLLs, you can add a search path by
+    # using os.add_dll_directory as shown below. If you are locating the DLLs
+    # outside of the package directory, simply call os.add_dll_directory as
+    # shown before importing this file.
+    #
+    # Here we are adding the path to search for DLL files bundled with the
+    # package.
+    try:
+        with os.add_dll_directory(os.path.dirname(__file__)):
+            _dll = cdll.LoadLibrary('libconcord-%i.dll' % ABI_VERSION)
+    except:
+        # If we're on an old version of Python, os.add_dll_directory is not
+        # available, but PATH is, so let's use it, and restore it after loading
+        # the DLL and dependencies. (It's not enough to specify the path in the
+        # call to LoadLibrary.) Changes are temporary and only for this process.
+        syspath = os.environ['PATH']
+        os.environ['PATH'] = syspath + ";" + os.path.dirname(__file__)
+        try:
+            _dll = cdll.LoadLibrary('libconcord-%i.dll' % ABI_VERSION)
+        except:
+            os.environ['PATH'] = syspath
+            raise
+        os.environ['PATH'] = syspath
+
 elif platform.system() == 'Darwin':
     _dll = cdll.LoadLibrary('libconcord.%i.dylib' % ABI_VERSION)
 else:
