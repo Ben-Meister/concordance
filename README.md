@@ -1,3 +1,10 @@
+# Concordance Fork
+This fork of the excellent [Concordance](https://github.com/jaymzh/concordance) software by Phil Dibowitz *et al.* contains my changes to build Concordance as a Python wheel for Windows, which we use in the Windows installer for [my fork of Congruity/MHGUI](https://github.com/Ben-Meister/congruity). Additionally, I have provided the built Concordance Windows installer for reference. This fork and the built binaries *do include* the change made by Scott Talbert so that SSL Certificate Verification works on Windows.
+
+Everything has been submitted upstream as pull requests.
+
+# Original README.md follows:
+
 # Concordance
 
 [![Linux Build](https://github.com/jaymzh/concordance/actions/workflows/ci-linux.yml/badge.svg)](https://github.com/jaymzh/concordance/actions/workflows/ci-linux.yml)
