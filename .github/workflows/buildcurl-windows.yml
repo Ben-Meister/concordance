@@ -1,0 +1,28 @@
+name: Build Curl for Windows
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: fedora:latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install dependencies
+      run: dnf -y install autoconf automake diffutils libtool fedpkg mingw32-gcc-c++ mingw32-libstdc++ mingw32-libzip
+    - name: Build libcurl
+      run: |
+        mkdir mingw-curl
+        cd mingw-curl
+        dnf download mingw-curl --source
+        rpm2cpio *.src.rpm | cpio -idmv
+        dnf -y builddep mingw-curl.spec
+        fedpkg local
+        cd -
+    - uses: actions/upload-artifact@v3
+      with:
+        name: src-rpm
+        path: mingw-curl/*.rpm
+    - uses: actions/upload-artifact@v3
+      with:
+        name: bin-rpms
+        path: mingw-curl/noarch/*.rpm
