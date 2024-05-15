@@ -70,6 +70,6 @@ jobs:
         architecture: 'x86'
     - name: Install and test wheel
       run: |
-        pip install (gci ${{steps.downloadwheel.outputs.download-path}}\*.whl).FullName
+        pip install (gci ${{steps.downloadwheel.outputs.download-path}}\libconcord*.whl).FullName
         python3 -c 'import libconcord; print(libconcord)'
  
