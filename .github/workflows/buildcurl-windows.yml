@@ -4,12 +4,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: fedora:latest
+    container: fedora:39
     steps:
     - uses: actions/checkout@v4
     - name: Install dependencies
       run: dnf -y install autoconf automake diffutils libtool fedpkg mingw32-gcc-c++ mingw32-libstdc++ mingw32-libzip
-    - name: Build libcurl
+    - name: Prep libcurl
       run: |
         mkdir mingw-curl
         cd mingw-curl
@@ -17,16 +17,20 @@ jobs:
         rpm2cpio *.src.rpm | cpio -idmv
         sed -i -f ../concordance/win/mingw-curl-spec-changes.sed mingw-curl.spec
         dnf -y builddep mingw-curl.spec
+        cd -
+    - uses: actions/upload-artifact@v3
+      with:
+        name: src-spec
+        path: mingw-curl/*.spec
+    - name: Build libcurl
+      run: |
+        cd mingw-curl
         fedpkg local
         cd -
     - uses: actions/upload-artifact@v3
       with:
         name: src-rpm
         path: mingw-curl/*.rpm
-    - uses: actions/upload-artifact@v3
-      with:
-        name: src-spec
-        path: mingw-curl/*.spec
     - uses: actions/upload-artifact@v3
       with:
         name: bin-rpms
