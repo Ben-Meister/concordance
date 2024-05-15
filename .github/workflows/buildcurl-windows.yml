@@ -15,6 +15,7 @@ jobs:
         cd mingw-curl
         dnf download mingw-curl --source
         rpm2cpio *.src.rpm | cpio -idmv
+        sed -i -f ../concordance/win/mingw-curl-spec-changes.sed mingw-curl.spec
         dnf -y builddep mingw-curl.spec
         fedpkg local
         cd -
@@ -22,6 +23,10 @@ jobs:
       with:
         name: src-rpm
         path: mingw-curl/*.rpm
+    - uses: actions/upload-artifact@v3
+      with:
+        name: src-spec
+        path: mingw-curl/*.spec
     - uses: actions/upload-artifact@v3
       with:
         name: bin-rpms
