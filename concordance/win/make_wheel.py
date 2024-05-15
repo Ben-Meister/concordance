@@ -33,4 +33,9 @@ with tempfile.TemporaryDirectory() as tempdir:
     for file in glob.glob('dist/*.whl'):
         print("Found wheel: " + file)
         shutil.copy2(file, os.path.dirname(os.path.abspath(__file__)))
+    os.environ["WIN32WHEEL_NOEXE"]="1"
+    subprocess.run([ 'python3', '-m', 'build', '-w' ])
+    for file in glob.glob('dist/*.whl'):
+        print("Found wheel: " + file)
+        shutil.copy2(file, os.path.dirname(os.path.abspath(__file__)) + '/' + file.replace('dist/','noexe-'))
     os.chdir(curdir)

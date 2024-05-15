@@ -23,6 +23,15 @@ import os
 common_name='libconcord'
 common_version='1.5'
 
+if os.environ.get("WIN32WHEEL_NOEXE", None) == "1": 
+    win32_package_data={
+                '': ['*.dll']
+            }
+else:
+    win32_package_data={
+                '': ['*.dll', '*.exe']
+            }
+
 if os.environ.get("WIN32WHEEL", None) == "1": 
     #Win32 Wheel Option Set
     setup(
@@ -30,9 +39,7 @@ if os.environ.get("WIN32WHEEL", None) == "1":
         version=common_version,
         packages=['libconcord'],
         zip_safe=False,
-        package_data={
-                '': ['*.dll', '*.exe']
-            },
+        package_data=win32_package_data,
         options={
                 "bdist_wheel": {
                     "plat_name": "win32",
