@@ -20,6 +20,7 @@ with tempfile.TemporaryDirectory() as tempdir:
         dll = line.split('=>')[1].strip()
         if dll != 'not found':
             shutil.copy2(dll, subdir)
+    shutil.copy2(os.path.dirname(os.path.abspath(__file__)) + '/../../libconcord/.libs/libconcord-6.dll', subdir)
     shutil.copy2(os.path.dirname(os.path.abspath(__file__)) + '/../../libconcord/bindings/python/libconcord.py', subdir + '/__init__.py')
     shutil.copy2(os.path.dirname(os.path.abspath(__file__)) + '/../../libconcord/bindings/python/setup.py', tempdir)
     shutil.copy2(os.path.dirname(os.path.abspath(__file__)) + '/../../libconcord/bindings/python/pyproject.toml', tempdir)
