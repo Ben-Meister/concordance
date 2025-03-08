@@ -8,7 +8,7 @@ import glob
 
 cp = subprocess.run([
     'mingw-ldd',
-    os.path.dirname(os.path.abspath(__file__)) + '/../.libs/concordance.exe',
+    os.path.dirname(os.path.abspath(__file__)) + '/../../libconcord/.libs/libconcord-6.dll',
     '--dll-lookup-dirs',
     os.environ['MINGW_SYSROOT_BIN'],
     os.path.dirname(os.path.abspath(__file__)) + '/../../libconcord/.libs',
