@@ -18,7 +18,7 @@ jobs:
         sed -i -f ../concordance/win/mingw-curl-spec-changes.sed mingw-curl.spec
         dnf -y builddep mingw-curl.spec
         cd -
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: src-spec
         path: mingw-curl/*.spec
@@ -27,11 +27,11 @@ jobs:
         cd mingw-curl
         fedpkg local
         cd -
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: src-rpm
         path: mingw-curl/*.rpm
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: bin-rpms
         path: mingw-curl/noarch/*.rpm
