@@ -11,11 +11,13 @@ s/^BuildRequires:.*mingw32-libssh2//
 s/^BuildRequires:.*mingw32-openssl//
 # Remove 64 bit since we're only building 32 bit
 /^BuildRequires:.*mingw64/d
-# Remove 64 bit packages, disable debug package generation
-/^%package -n mingw64-curl/,/^%{?mingw_debug_package}/c\%global debug_package %{nil}
-# Remove 64 bit package files
-/^%files -n mingw64-curl/,/^%changelog/c\%changelog
+# Remove 64 bit packages and 32-bit static, disable debug package
+/^%package -n mingw32-curl-static/,/^%{?mingw_debug_package}/c\%global debug_package %{nil}
+# Remove 64 bit package files and 32-bit static
+/^%files -n mingw32-curl-static/,/^%changelog/c\%changelog
 # Misc remnants
+/MINGW_BUILDDIR_SUFFIX=_static/d
 /mv.*mingw64/d
 /rm.*mingw64/d
-/^# Win64/d
+/mv.*static/d
+/rm.*static/d
