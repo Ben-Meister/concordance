@@ -12,10 +12,36 @@ jobs:
     - uses: actions/checkout@v6
     - name: Install dependencies
       run: |
-        dnf install -y autoconf automake diffutils libtool mingw32-gcc-c++ mingw32-hidapi mingw32-libstdc++ mingw32-libzip mingw32-nsis mingw32-libpsl mingw32-libidn2 python3-pip python3-wheel
-        rpm -i concordance/win/mingw32-curl-from-workflow.rpm
+        dnf install -y autoconf automake diffutils fedpkg libtool mingw32-gcc-c++ mingw32-hidapi mingw32-libstdc++ mingw32-libzip mingw32-nsis mingw32-libpsl mingw32-libidn2 python3-pip python3-wheel
+    - name: Prep libcurl
+      run: |
+        mkdir mingw-curl
+        cd mingw-curl
+        dnf download mingw-curl --source
+        rpm2cpio *.src.rpm | cpio -idmv
+        sed -i -f ../concordance/win/mingw-curl-spec-changes.sed mingw-curl.spec
+        cd -
+    - uses: actions/upload-artifact@v7
+      with:
+        name: src-spec
+        path: mingw-curl/*.spec
+    - name: Build libcurl
+      run: |
+        dnf -y builddep mingw-curl.spec
+        cd mingw-curl
+        fedpkg local
+        cd -
+    - uses: actions/upload-artifact@v7
+      with:
+        name: src-rpm
+        path: mingw-curl/*.rpm
+    - uses: actions/upload-artifact@v7
+      with:
+        name: bin-rpms
+        path: mingw-curl/noarch/*.rpm
     - name: Build libconcord
       run: |
+        rpm -i mingw-curl/noarch/*.rpm
         cd libconcord
         mkdir m4; autoreconf --install
         mingw32-configure
