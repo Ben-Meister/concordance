@@ -27,8 +27,8 @@ jobs:
         path: mingw-curl/*.spec
     - name: Build libcurl
       run: |
-        dnf -y builddep mingw-curl.spec
         cd mingw-curl
+        dnf -y builddep mingw-curl.spec
         fedpkg local
         cd -
     - uses: actions/upload-artifact@v7
