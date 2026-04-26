@@ -1,3 +1,5 @@
+1i %global mingw_build_win64 0
+1i %global mingw_build_ucrt64 0
 s/^Release:.*/Release:     99%{?dist}/
 # Enable schannel
 s/^MINGW32_CONFIGURE_ARGS.*//
