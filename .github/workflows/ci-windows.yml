@@ -19,12 +19,15 @@ jobs:
         cd mingw-curl
         dnf download mingw-curl --source
         rpm2cpio *.src.rpm | cpio -idmv
+        cp mingw-curl.spec mingw-curl.original_spec
         sed -i -f ../concordance/win/mingw-curl-spec-changes.sed mingw-curl.spec
         cd -
     - uses: actions/upload-artifact@v7
       with:
         name: src-spec
-        path: mingw-curl/*.spec
+        path: |
+          mingw-curl/*.spec
+          mingw-curl/*.original_spec
     - name: Restore libcurl from cache (if available)
       id: restore-curl
       uses: actions/cache/restore@v5
