@@ -25,12 +25,26 @@ jobs:
       with:
         name: src-spec
         path: mingw-curl/*.spec
-    - name: Build libcurl
+    - name: Restore libcurl from cache (if available)
+      id: restore-curl
+      uses: actions/cache/restore@v5
+      with:
+        path: mingw-curl/noarch/*.rpm
+        key: libcurl-mingw32-schannel-${{ hashFiles('mingw-curl/*.spec') }}
+    - name: Build libcurl if it wasn't in the cache
+      if: steps.restore-curl.outputs.cache-hit != 'true'
       run: |
         cd mingw-curl
         dnf -y builddep mingw-curl.spec
         fedpkg local
         cd -
+# Explicit save/restore so that if libcurl compiles, it is cached and reused even if concordance/libconcord fail
+    - name: Save libcurl to cache
+      if: steps.restore-curl.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v5
+      with:
+        path: mingw-curl/noarch/*.rpm
+        key: libcurl-mingw32-schannel-${{ hashFiles('mingw-curl/*.spec') }}
     - uses: actions/upload-artifact@v7
       with:
         name: src-rpm
