@@ -23,8 +23,8 @@ import os
 common_name='libconcord'
 common_version='1.5'
 
-if os.environ.get("WIN32WHEEL", None) == "1": 
-    #Win32 Wheel Option Set
+if os.environ.get("WIN64WHEEL", None) == "1": 
+    #Win64 Wheel Option Set
     setup(
         name=common_name,
         version=common_version,
@@ -35,7 +35,7 @@ if os.environ.get("WIN32WHEEL", None) == "1":
             },
         options={
                 "bdist_wheel": {
-                    "plat_name": "win32",
+                    "plat_name": "win_amd64",
                 },
             },
     )

@@ -85,8 +85,8 @@ jobs:
     - name: Build Python wheel
       run: |
         pip install build
-        MINGW_SYSROOT_BIN="/usr/i686-w64-mingw32/sys-root/mingw/bin" concordance/win/make_wheel.py
-    - uses: actions/upload-artifact@v4
+        MINGW_SYSROOT_BIN="/usr/x86_64-w64-mingw32/sys-root/mingw/bin" concordance/win/make_wheel.py
+    - uses: actions/upload-artifact@v7
       with:
         name: windows-wheel
         path: concordance/win/*.whl
@@ -104,14 +104,14 @@ jobs:
         Start-Sleep -Seconds 5
         cd "C:\Program Files\Concordance"
         .\concordance.exe --version
-    - uses: actions/download-artifact@v4
+    - uses: actions/download-artifact@v8
       id: downloadwheel
       with:
         name: windows-wheel
     - uses: actions/setup-python@v5
       with:
         python-version: '3.12'
-        architecture: 'x86'
+        architecture: 'x64'
     - name: Install and test wheel
       run: |
         pip install (gci ${{steps.downloadwheel.outputs.download-path}}\*.whl).FullName

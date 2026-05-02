@@ -28,7 +28,7 @@ with tempfile.TemporaryDirectory() as tempdir:
     curdir = os.getcwd()
     os.chdir(tempdir)
 
-    os.environ["WIN32WHEEL"]="1"
+    os.environ["WIN64WHEEL"]="1"
     subprocess.run([ 'python3', '-m', 'build', '-w' ])
     for file in glob.glob('dist/*.whl'):
         print("Found wheel: " + file)
